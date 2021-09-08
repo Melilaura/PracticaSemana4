@@ -13,48 +13,46 @@ import java.net.UnknownHostException;
 
 public class PingActivity extends AppCompatActivity {
 
-    private ConstraintLayout pingLayout;
 
-    private TextView textResultado;
+
+    private TextView textPingResultado;
     private Button buttonRegresar;
 
     private String ip;
-    private String estado;
+    private String text;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ip= getIntent().getStringExtra(ip);
+        setContentView(R.layout.activity_ping);
 
-        pingLayout = findViewById(R.id.pingLayout);
+        ip= getIntent().getStringExtra("ip");
 
-        textResultado = findViewById(R.id.textResultado);
+        textPingResultado = findViewById(R.id.textPingResultado);
         buttonRegresar = findViewById(R.id.buttonRegresar);
 
-        buttonRegresar.setOnClickListener((view) -> {
+       buttonRegresar.setOnClickListener((view) -> {
             finish();
         });
 
-        estado= "";
+        text= " ";
         new Thread(() -> {
-
             for (int i=0; i<5;i++){
 
                 try {
                     InetAddress searchIp = InetAddress.getByName(ip);
+
                     if (searchIp.isReachable(100)){
-                        estado +="Recibido\n";
+                        text +="Recibido\n";
                     }else {
-                        estado +="Perdido\n";
+                        text +="Perdido\n";
                     }
                     runOnUiThread(()->{
-                        textResultado.setText(estado);
+                        textPingResultado.setText(text);
                     });
-
                 }catch (UnknownHostException e){
-
+                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

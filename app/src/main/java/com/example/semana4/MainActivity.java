@@ -19,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout mainLayout;
 
     private Button buttonPing;
-    private TextView textIP;
+    private TextView textID;
 
-    private int partA,partB,partC,partD;
+    //private int partA,partB,partC,partD;
     private EditText ipA, ipB, ipC, ipD;
 
 
@@ -42,27 +42,26 @@ public class MainActivity extends AppCompatActivity {
 
         buttonPing.setOnClickListener((view)->{
 
-            partA= Integer.parseInt(ipA.getText().toString());
-            partB= Integer.parseInt(ipB.getText().toString());
-            partC= Integer.parseInt(ipC.getText().toString());
-            partD= Integer.parseInt(ipC.getText().toString());
+            int partA= Integer.parseInt(ipA.getText().toString());
+            int partB= Integer.parseInt(ipB.getText().toString());
+            int partC= Integer.parseInt(ipC.getText().toString());
+            int partD= Integer.parseInt(ipC.getText().toString());
 
             if(validateIpPart(partA) && validateIpPart(partB)&& validateIpPart(partC) && validateIpPart(partD)){
-                String ip= " "+ partA + partB+ partC+partD;
+                String ip= " "+ partA + partB + partC + partD;
                 ping(ip);
             }else {
-                Toast.makeText(this, "La IP no es vaalida", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "La IP no es valida", Toast.LENGTH_SHORT).show();
+
             }
         });
 
-        textIP= findViewById(R.id.textIP);
+        textID= findViewById(R.id.textID);
 
         new Thread(()->{
             try {
                 InetAddress localIp = InetAddress.getLocalHost();
-                runOnUiThread(()->{
-                    textIP.setText(localIp.getHostAddress());
-                });
+                runOnUiThread(()-> textID.setText(localIp.getHostAddress()));
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
@@ -71,20 +70,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private boolean validateIpPart (int part){
-        if(part < 0 || part > 255){
-            return false;
-        }
-        return true;
+            return part >= 0 && part <= 255;
         }
 
-        private void ping(String IP){
+        private void ping(String ip){
         Intent resultIntent = new Intent(this, PingActivity.class);
-        resultIntent.putExtra("ip", IP);
+        resultIntent.putExtra("ip", ip);
         startActivity(resultIntent);
         }
 
         private String formatIpAddress (int ip){
-        return String.format(Locale.US, "Xd,Xd,Xd,Xd", (ip & 0xff), (ip >> 8 & 0xff),(ip >> 16 & 0xff),(ip >> 24 & 0xff));
+        return String.format(Locale.US, "%d,%d,%d,%d", (ip & 0xff), (ip >> 8 & 0xff),(ip >> 16 & 0xff),(ip >> 24 & 0xff));
         }
 
 
