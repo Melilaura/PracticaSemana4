@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
     //private int partA,partB,partC,partD;
     private EditText ipA, ipB, ipC, ipD;
+    private int partA, partB, partC, partD;
+
+    private String ip;
 
 
 
@@ -42,16 +45,17 @@ public class MainActivity extends AppCompatActivity {
 
         buttonPing.setOnClickListener((view)->{
 
-            int partA= Integer.parseInt(ipA.getText().toString());
-            int partB= Integer.parseInt(ipB.getText().toString());
-            int partC= Integer.parseInt(ipC.getText().toString());
-            int partD= Integer.parseInt(ipC.getText().toString());
+            partA= Integer.parseInt(ipA.getText().toString());
+            partB= Integer.parseInt(ipB.getText().toString());
+            partC= Integer.parseInt(ipC.getText().toString());
+            partD= Integer.parseInt(ipD.getText().toString());
 
             if(validateIpPart(partA) && validateIpPart(partB)&& validateIpPart(partC) && validateIpPart(partD)){
-                String ip= " "+ partA + partB + partC + partD;
+                ip= partA+"."+partB+"."+partC+"."+partD;
                 ping(ip);
-            }else {
-                Toast.makeText(this, "La IP no es valida", Toast.LENGTH_SHORT).show();
+            }else
+                {
+                Toast.makeText(this, "La IP no es valida, inserte números entre 0 y 255", Toast.LENGTH_SHORT).show();
 
             }
         });
