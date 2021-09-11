@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout mainLayout;
 
     private Button buttonPing;
+    private Button buttonHost;
     private TextView textID;
 
     //private int partA,partB,partC,partD;
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     private int partA, partB, partC, partD;
 
     private String ip;
+    private String hostA,hostB, hostC;
+
+    private Boolean press;
 
 
 
@@ -43,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
         buttonPing = findViewById(R.id.buttonPing);
 
+        // PING THING
         buttonPing.setOnClickListener((view)->{
+
+            press=false;
 
             partA= Integer.parseInt(ipA.getText().toString());
             partB= Integer.parseInt(ipB.getText().toString());
@@ -65,28 +72,72 @@ public class MainActivity extends AppCompatActivity {
         new Thread(()->{
             try {
                 InetAddress localIp = InetAddress.getLocalHost();
-                runOnUiThread(()-> textID.setText(localIp.getHostAddress()));
+                runOnUiThread(()->
+                        textID.setText(localIp.getHostAddress()));
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
             }).start();
+        // PING THING FINISH
+
+
+        // HOST THING
+
+        buttonHost = findViewById(R.id. buttonHost);
+
+        buttonHost.setOnClickListener((view)->{
+
+            press= true;
+
+            partA= Integer.parseInt(ipA.getText().toString());
+            partB= Integer.parseInt(ipB.getText().toString());
+            partC= Integer.parseInt(ipC.getText().toString());
+
+            if(validateIpPart(partA) && validateIpPart(partB)&& validateIpPart(partC)){
+                hostA=""+partA;
+                hostB=""+partB;
+                hostC=""+partC;
+                Host();
+            }
+            else
+            {
+                Toast.makeText(this, "La IP no es valida, inserte números entre 0 y 255", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        // HOST THING FINISH
 
         }
 
-        private boolean validateIpPart (int part){
+
+
+        private boolean validateIpPart (int part)
+        {
             return part >= 0 && part <= 255;
         }
 
         private void ping(String ip){
+
         Intent resultIntent = new Intent(this, PingActivity.class);
+
         resultIntent.putExtra("ip", ip);
+
         startActivity(resultIntent);
         }
 
-        private String formatIpAddress (int ip){
-        return String.format(Locale.US, "%d,%d,%d,%d", (ip & 0xff), (ip >> 8 & 0xff),(ip >> 16 & 0xff),(ip >> 24 & 0xff));
-        }
 
+    private void Host(){
+
+        Intent hostIntent = new Intent(this, PingActivity.class);
+
+        hostIntent.putExtra("hostA",  hostA);
+        hostIntent.putExtra("hostB", hostB);
+        hostIntent.putExtra("hostC", hostC);
+        hostIntent.putExtra("press", press);
+
+        startActivity(hostIntent);
+    }
 
 
     }
